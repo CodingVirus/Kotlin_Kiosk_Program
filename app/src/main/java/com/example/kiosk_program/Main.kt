@@ -39,7 +39,6 @@ fun main() {
 			val menu = menus.find { it.id == menuId }
 
 			menu?.displayInfo()
-
 			return
 		}
 	}
