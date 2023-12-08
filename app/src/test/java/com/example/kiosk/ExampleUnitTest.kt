@@ -1,4 +1,4 @@
-package com.example.kiosk_program
+package com.example.kiosk
 
 import org.junit.Test
 

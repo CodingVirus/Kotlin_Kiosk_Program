@@ -4,13 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kiosk_program"
+    namespace = "com.example.kiosk"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.kiosk_program"
-        minSdk = 26
-        targetSdk = 34
+        applicationId = "com.example.kiosk"
+        minSdk = 33
         versionCode = 1
         versionName = "1.0"
 
