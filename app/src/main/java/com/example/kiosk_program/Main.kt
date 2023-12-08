@@ -9,7 +9,7 @@ import kotlinx.coroutines.*
 suspend fun main() {
 	while (true) {
 		// category
-		val categories = getCategories()
+		val categories = getCategories().await()
 
 		println("아래 메뉴판을 보시고 카테고리의 번호를 입력해주세요.")
 		println("[ Category ]")
@@ -23,7 +23,7 @@ suspend fun main() {
 		if (categoryNumber == 0) return println("키오스크를 종료합니다.")
 
 		// menu
-		val menus = getMenus(categoryNumber)
+		val menus = getMenus(categoryNumber).await()
 
 		println("원하는 메뉴의 번호를 입력해주세요.")
 		categories.find { it.id == categoryNumber }?.let {
@@ -57,7 +57,7 @@ fun getInputNumber(max: Int): Int {
 	}
 }
 
-suspend fun getCategories(): List<Category> {
+fun getCategories(): Deferred<List<Category>> {
 	GlobalScope.launch {
 		repeat(6) {
 			println("카테고리 불러오는중...")
@@ -65,13 +65,15 @@ suspend fun getCategories(): List<Category> {
 		}
 	}
 
-	delay(3000)
+	return CoroutineScope(Dispatchers.IO).async {
+		val typeToken = object : TypeToken<List<Category>>() {}.type
+		delay(3000)
 
-	val typeToken = object : TypeToken<List<Category>>() {}.type
-	return Gson().fromJson(Category.CATEGORIESDATA, typeToken)
+		Gson().fromJson(Category.CATEGORIESDATA, typeToken)
+	}
 }
 
-suspend fun getMenus(categoryNumber: Int): List<Menu> {
+fun getMenus(categoryNumber: Int): Deferred<List<Menu>> {
 	GlobalScope.launch {
 		repeat(4) {
 			println("메뉴 불러오는중...")
@@ -79,19 +81,20 @@ suspend fun getMenus(categoryNumber: Int): List<Menu> {
 		}
 	}
 
-	delay(2000)
+	return CoroutineScope(Dispatchers.IO).async {
+		delay(2000)
+		when (categoryNumber) {
+			1 -> {
+				val typeToken = object : TypeToken<List<Burger>>() {}.type
+				Gson().fromJson(Burger.BURGERSDATA, typeToken)
+			}
 
-	return when (categoryNumber) {
-		1 -> {
-			val typeToken = object : TypeToken<List<Burger>>() {}.type
-			Gson().fromJson(Burger.BURGERSDATA, typeToken)
+			2 -> {
+				val typeToken = object : TypeToken<List<Drink>>() {}.type
+				Gson().fromJson(Drink.DRINKSDATA, typeToken)
+			}
+
+			else -> listOf()
 		}
-
-		2 -> {
-			val typeToken = object : TypeToken<List<Drink>>() {}.type
-			Gson().fromJson(Drink.DRINKSDATA, typeToken)
-		}
-
-		else -> listOf()
 	}
 }
