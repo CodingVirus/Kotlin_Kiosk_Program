@@ -4,8 +4,9 @@ import com.example.kiosk_program.menus.Burger
 import com.example.kiosk_program.menus.Drink
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.*
 
-fun main() {
+suspend fun main() {
 	while (true) {
 		// category
 		val categories = getCategories()
@@ -56,12 +57,30 @@ fun getInputNumber(max: Int): Int {
 	}
 }
 
-fun getCategories(): List<Category> {
+suspend fun getCategories(): List<Category> {
+	GlobalScope.launch {
+		repeat(6) {
+			println("카테고리 불러오는중...")
+			delay(500)
+		}
+	}
+
+	delay(3000)
+
 	val typeToken = object : TypeToken<List<Category>>() {}.type
 	return Gson().fromJson(Category.CATEGORIESDATA, typeToken)
 }
 
-fun getMenus(categoryNumber: Int): List<Menu> {
+suspend fun getMenus(categoryNumber: Int): List<Menu> {
+	GlobalScope.launch {
+		repeat(4) {
+			println("메뉴 불러오는중...")
+			delay(500)
+		}
+	}
+
+	delay(2000)
+
 	return when (categoryNumber) {
 		1 -> {
 			val typeToken = object : TypeToken<List<Burger>>() {}.type
