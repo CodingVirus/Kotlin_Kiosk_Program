@@ -4,6 +4,7 @@ class KioskControl {
 
     var drinkList = ArrayList<Drink>()
     var foodList = ArrayList<Food>()
+
     fun Start() {
         println("*****별다방에 오신것을 환영합니다.*****")
         println("메뉴를 선택 하세요.\n")
@@ -32,6 +33,9 @@ class KioskControl {
             var input = readLine()!!.toInt()
             when (input) {
                 0 -> Start()
+                1 -> println("${list[0].name}를 주문하였습니다.")
+                2 -> println("${list[1].name}를 주문하였습니다.")
+                3 -> println("${list[2].name}를 주문하였습니다.")
             }
         }
     }
@@ -49,6 +53,8 @@ class KioskControl {
             var input = readLine()!!.toInt()
             when (input) {
                 0 -> Start()
+                1 -> println("${list[0].name}를 주문하였습니다.")
+                2 -> println("${list[1].name}를 주문하였습니다.")
             }
         }
     }
